@@ -1,6 +1,9 @@
 const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
+const forecast = require('./utils/forecast.js')
+const geocode = require('./utils/geocode.js')
+
 
 // console.log(__dirname)
 // // console.log(__filename)
@@ -56,21 +59,26 @@ app.get('/weather', (req, res) => {
         return
     }
 
-    res.send({
-        address: req.query.address
-    })
-})
-
-app.get('/products', (req, res) => {
-    if (!req.query.search) {
-        res.send({
-            error: 'Must provide a search term'
-        })
-        return
-    }
-
-    res.send({
-        products: []
+    geocode(req.query.address, (error, {longitude, latitude, location} = {}) => {
+        if (error) {
+            res.send({
+                error
+            })
+        } else {
+            forecast(longitude, latitude, (error, {temp, precipProbability, daily_summary} = {}) => {
+                if (error) {
+                    res.send({
+                        error
+                    })
+                } else {
+                    res.send({
+                        location,
+                        forecast: daily_summary,
+                        address: req.query.address
+                    })
+                }
+            })
+        }
     })
 })
 

@@ -35,8 +35,22 @@ header a {
 
 .landing-img {
     width: 250px;
+    padding-bottom: 8px;
 }
 
 .main-content {
     flex-grow: 1;
+}
+
+input {
+    border: 1px solid #cccccc;
+    padding: 8px;
+}
+
+button {
+    cursor: pointer;
+    border: 1px solid #888888;
+    background: #888888;
+    color: white;
+    padding: 8px;
 }
