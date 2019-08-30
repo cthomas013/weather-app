@@ -1,6 +1,9 @@
 const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
+const forecast = require('./utils/forecast.js')
+const geocode = require('./utils/geocode.js')
+
 
 // console.log(__dirname)
 // // console.log(__filename)
@@ -13,6 +16,7 @@ const views_path = path.join(__dirname, '..', 'templates', 'views')
 const partials_path = path.join(__dirname, '..', 'templates', 'partials')
 
 var app = express()
+var port = process.env.PORT || 3000
 
 // set up handlebars 
 app.set('view engine', 'hbs') 
@@ -56,21 +60,26 @@ app.get('/weather', (req, res) => {
         return
     }
 
-    res.send({
-        address: req.query.address
-    })
-})
-
-app.get('/products', (req, res) => {
-    if (!req.query.search) {
-        res.send({
-            error: 'Must provide a search term'
-        })
-        return
-    }
-
-    res.send({
-        products: []
+    geocode(req.query.address, (error, {longitude, latitude, location} = {}) => {
+        if (error) {
+            res.send({
+                error
+            })
+        } else {
+            forecast(longitude, latitude, (error, {temp, precipProbability, daily_summary} = {}) => {
+                if (error) {
+                    res.send({
+                        error
+                    })
+                } else {
+                    res.send({
+                        location,
+                        forecast: daily_summary,
+                        address: req.query.address
+                    })
+                }
+            })
+        }
     })
 })
 
@@ -92,6 +101,6 @@ app.get('*', (req, res) => {
 })
 
 // start the server
-app.listen(3000, () => {
-    console.log('Server listening on port 3000')
+app.listen(port, () => {
+    console.log('Server listening on port', port)
 })
