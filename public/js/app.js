@@ -13,7 +13,8 @@ const getWeather = (address) => {
                 errorMsg.textContent = data.error
             } else {
                 locationMsg.textContent = data.location
-                forecastMsg.textContent = data.forecast
+                forecastMsg.textContent = data.forecast + 'The current temperature is ' + data.temp
+                    + '\xB0, and there is a ' + data.precipProbability + '% chance of precipitation.'
             }
         })
     })
