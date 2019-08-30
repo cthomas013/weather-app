@@ -29,7 +29,7 @@ app.use(express.static(public_path))
 
 app.get('', (req, res) => {
     res.render('index', {
-        title: 'Express Homepage',
+        title: 'Weather',
         header: 'Weather',
         creator: 'Me'
     })
