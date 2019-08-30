@@ -7,7 +7,7 @@ let errorMsg = document.querySelector('.errMsg')
 let forecastMsg = document.querySelector('.forecastMsg')
 
 const getWeather = (address) => {
-    fetch('http://localhost:3000/weather?address=' + address).then((response) => {
+    fetch('/weather?address=' + address).then((response) => {
         response.json().then((data) => {
             if (data.error) {
                 errorMsg.textContent = data.error
@@ -30,6 +30,6 @@ weatherForm.addEventListener('submit', (e) => {
     // get the weather forecast for the input location
     locationMsg.textContent = 'Loading ...'
     forecastMsg.textContent = ''
-    
+
     getWeather(location)
 })
