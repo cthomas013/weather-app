@@ -30,5 +30,6 @@ weatherForm.addEventListener('submit', (e) => {
     // get the weather forecast for the input location
     locationMsg.textContent = 'Loading ...'
     forecastMsg.textContent = ''
+    
     getWeather(location)
 })
